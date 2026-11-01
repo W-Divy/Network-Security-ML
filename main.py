@@ -9,8 +9,8 @@ from networksecurity.entity.config_entity import TrainingPipelineConfig
 from networksecurity.components.model_trainer import ModelTrainer
 from networksecurity.entity.config_entity import ModelTrainerConfig
 import mlflow
-mlflow.set_tracking_uri("sqlite:///mlflow.db")
-mlflow.set_experiment("my_experiment")
+# mlflow.set_tracking_uri("sqlite:///mlflow.db")
+# mlflow.set_experiment("my_experiment")
 
 import sys
 

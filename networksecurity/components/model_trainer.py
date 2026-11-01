@@ -6,6 +6,7 @@ from networksecurity.logging.logger import logging
 
 from networksecurity.entity.artifact_entity import DataTransformationArtifact,ModelTrainerArtifact
 from networksecurity.entity.config_entity import ModelTrainerConfig
+import joblib, tempfile
 
 
 
@@ -27,9 +28,19 @@ import mlflow
 from urllib.parse import urlparse
 
 import dagshub
-#dagshub.init(repo_owner='', repo_name='networksecurity', mlflow=True)
+import mlflow
 
-# os.environ["MLFLOW_TRACKING_URI"]="https://dagshub.com/krishnaik06/networksecurity.mlflow"
+import os
+import mlflow
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = "W-Divy"
+# os.environ["MLFLOW_TRACKING_PASSWORD"] = "65946ad23674f0bb1b7a2066b606ca0ccb039536"  # DagsHub > Settings > Tokens
+
+mlflow.set_tracking_uri("https://dagshub.com/W-Divy/Network-Security-ML.mlflow")
+mlflow.set_experiment("NetworkSecurity")
+print("Tracking URI:", mlflow.get_tracking_uri())
+
+# os.environ["MLFLOW_TRACKING_URI"]=""
 # os.environ["MLFLOW_TRACKING_USERNAME"]=""
 # os.environ["MLFLOW_TRACKING_PASSWORD"]=""
 
@@ -46,20 +57,25 @@ class ModelTrainer:
             raise NetworkSecurityException(e,sys)
         
     def track_mlflow(self, best_model, train_metric, test_metric):
-     with mlflow.start_run():
-        mlflow.log_metric("train_f1_score", train_metric.f1_score)
-        mlflow.log_metric("train_precision", train_metric.precision_score)
-        mlflow.log_metric("train_recall", train_metric.recall_score)
-        mlflow.log_metric("test_f1_score", test_metric.f1_score)
-        mlflow.log_metric("test_precision", test_metric.precision_score)
-        mlflow.log_metric("test_recall", test_metric.recall_score)
+        print("Tracking URI:", mlflow.get_tracking_uri())
 
-        mlflow.sklearn.log_model(
-            sk_model=best_model,
-            name="model",
-            registered_model_name="NetworkSecurityModel",
-            skops_trusted_types=["sklearn.tree._tree.Tree"],
-        )
+        with mlflow.start_run(run_name="network-security-training") as run:
+            print("Run ID:", run.info.run_id)
+
+            mlflow.log_metric("train_f1_score", train_metric.f1_score)
+            mlflow.log_metric("train_precision", train_metric.precision_score)
+            mlflow.log_metric("train_recall", train_metric.recall_score)
+
+            mlflow.log_metric("test_f1_score", test_metric.f1_score)
+            mlflow.log_metric("test_precision", test_metric.precision_score)
+            mlflow.log_metric("test_recall", test_metric.recall_score)
+
+            mlflow.log_param("model_type", type(best_model).__name__)
+
+            with tempfile.TemporaryDirectory() as d:
+                path = os.path.join(d, "model.pkl")
+                joblib.dump(best_model, path)
+                mlflow.log_artifact(path, artifact_path="model")
 
 
         

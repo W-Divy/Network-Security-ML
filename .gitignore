@@ -1,2 +1,28 @@
-venv
+# secrets
 .env
+*.pem
+*.key
+credentials.json
+
+# environment
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.ipynb_checkpoints/
+
+# ML outputs
+mlruns/
+mlflow.db
+Artifacts/
+final_model/
+logs/
+*.pkl
+*.npy
+Network_Data/
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
