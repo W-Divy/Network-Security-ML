@@ -105,3 +105,13 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,param):
 
     except Exception as e:
         raise NetworkSecurityException(e, sys)
+
+
+
+# import io
+# import boto3
+
+
+# def load_object_from_s3(key: str, bucket: str = "your-bucket-name"):
+#     body = boto3.client("s3").get_object(Bucket=bucket, Key=key)["Body"].read()
+#     return pickle.load(io.BytesIO(body))
