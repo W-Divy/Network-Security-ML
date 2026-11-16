@@ -6,6 +6,7 @@ dagshub
 fastapi
 github actions
 actions secrets
+github runners
 docker
 aws s3
 aws ecr
