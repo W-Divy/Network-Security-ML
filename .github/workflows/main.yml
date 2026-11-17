@@ -95,6 +95,7 @@ jobs:
            -e 'AWS_REGION=${{ secrets.AWS_REGION }}' \
            -e 'AWS_DEFAULT_REGION=${{ secrets.AWS_REGION }}' \
            -e 'MONGODB_URL_KEY=${{ secrets.MONGODB_URL_KEY }}' \
+           -e MONGO_DB_URL=${{ secrets.MONGODB_URL_KEY }} \
            -e 'MLFLOW_TRACKING_USERNAME=${{ secrets.MLFLOW_TRACKING_USERNAME }}' \
            -e 'MLFLOW_TRACKING_PASSWORD=${{ secrets.MLFLOW_TRACKING_PASSWORD }}' \
            ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
